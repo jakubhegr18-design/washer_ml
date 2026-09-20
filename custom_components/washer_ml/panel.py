@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -48,8 +49,8 @@ async def async_setup_panel(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Register the custom panel and the static frontend assets."""
     frontend_dir = Path(__file__).parent / "frontend"
     if not hass.data[DOMAIN].get(PANEL_STATIC_KEY):
-        hass.http.register_static_path(
-            _STATIC_BASE, str(frontend_dir), cache_headers=True
+        await hass.http.async_register_static_paths(
+            [StaticPathConfig(_STATIC_BASE, str(frontend_dir), True)]
         )
         hass.data[DOMAIN][PANEL_STATIC_KEY] = True
 
