@@ -1,6 +1,15 @@
 # Washer ML
 
-> **⚠️ Tento projekt NENÍ funkční — je zabugovaný.** Probíhá aktivní vývoj; očekávejte chyby a změny rozhraní. Zatím není vhodný pro produkční použití.
+## Status
+
+> **⚠️ This project is not functional and will not be maintained.**
+>
+> After testing, I found that [WashData](https://github.com/3dg1luk43/ha_washdata)
+> solves the same problem better and with an existing community. I recommend using
+> WashData instead if you need washing machine cycle detection.
+>
+> Washer ML was a learning experiment with local ML, but WashData proved to be
+> the better solution for this use case.
 
 Home Assistant custom integration (HACS compatible) that detects washing
 machine cycle phases from a smart plug power sensor — **fully locally**, no
