@@ -5,7 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from homeassistant.components.frontend import async_remove_panel
 from homeassistant.components.http import StaticPathConfig
+from homeassistant.components.panel_custom import async_register_panel
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -55,20 +57,21 @@ async def async_setup_panel(hass: HomeAssistant, entry: ConfigEntry) -> None:
         hass.data[DOMAIN][PANEL_STATIC_KEY] = True
 
     config = _build_config(hass, entry)
-    hass.components.panel_custom.async_register_panel(
+    await async_register_panel(
         hass,
         webcomponent_name=_WEBCOMPONENT,
         frontend_url_path=_PANEL_URL,
-        module_url=f"{_STATIC_BASE}/washer-panel.js",
+        module_url=f"{_STATIC_BASE}/washer-panel.js?v={entry.entry_id}",
         config=config,
         sidebar_title=config["name"],
         sidebar_icon="mdi:washing-machine",
+        require_admin=False,
     )
 
 
 def async_unset_panel(hass: HomeAssistant) -> None:
     """Remove the custom panel when the entry is unloaded."""
     try:
-        hass.components.panel_custom.async_unregister_panel(hass, _PANEL_URL)
+        async_remove_panel(hass, _PANEL_URL)
     except (KeyError, ValueError):
         pass
