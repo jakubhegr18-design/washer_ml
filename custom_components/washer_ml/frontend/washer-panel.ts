@@ -134,6 +134,7 @@ function template(hass: Hass | null, panel: WasherPanelPanel | null): string {
     ["heating", "Ohřívání"],
     ["washing", "Prání"],
     ["rinsing", "Máchání"],
+    ["spinning", "Odstřeďování"],
     ["finished", "Skončilo"],
   ];
   let calibration = "";

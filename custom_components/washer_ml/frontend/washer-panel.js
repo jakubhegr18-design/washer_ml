@@ -108,6 +108,7 @@
       ["heating", "Ohřívání"],
       ["washing", "Prání"],
       ["rinsing", "Máchání"],
+      ["spinning", "Odstřeďování"],
       ["finished", "Skončilo"],
     ];
     calibDefs.forEach(function (def) {

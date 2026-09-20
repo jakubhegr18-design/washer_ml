@@ -37,6 +37,10 @@ CREATE TABLE IF NOT EXISTS cycles (
 )
 """
 
+_INDEX_SQL = (
+    "CREATE INDEX IF NOT EXISTS idx_cycles_entry_id ON cycles (entry_id, id)"
+)
+
 _JSON_COLUMNS = {"raw_samples", "phase_labels", "auto_labels"}
 _UPDATEABLE_COLUMNS = {
     "started_at",
@@ -69,6 +73,7 @@ class WasherMlDataStore:
         self._conn = await aiosqlite.connect(str(self._db_path))
         await self._conn.execute("PRAGMA journal_mode=WAL;")
         await self._conn.execute(_SCHEMA)
+        await self._conn.execute(_INDEX_SQL)
         await self._conn.commit()
 
     async def async_close(self) -> None:
@@ -117,9 +122,10 @@ class WasherMlDataStore:
         async with self._lock:
             assert self._conn is not None
             await self._conn.execute(
-                "DELETE FROM cycles WHERE id NOT IN ("
-                "SELECT id FROM cycles ORDER BY id DESC LIMIT ?)",
-                (max_stored_cycles,),
+                "DELETE FROM cycles WHERE entry_id = ? AND id NOT IN ("
+                "SELECT id FROM cycles WHERE entry_id = ? "
+                "ORDER BY id DESC LIMIT ?)",
+                (self._entry.entry_id, self._entry.entry_id, max_stored_cycles),
             )
             await self._conn.commit()
 
@@ -128,7 +134,9 @@ class WasherMlDataStore:
             assert self._conn is not None
             cursor = await self._conn.execute(
                 "SELECT id, started_at, ended_at, program_label, raw_samples, "
-                "phase_labels, auto_labels FROM cycles ORDER BY id"
+                "phase_labels, auto_labels FROM cycles "
+                "WHERE entry_id = ? ORDER BY id",
+                (self._entry.entry_id,),
             )
             rows = await cursor.fetchall()
         cycles: list[dict[str, Any]] = []
@@ -149,7 +157,10 @@ class WasherMlDataStore:
     async def async_cycle_count(self) -> int:
         async with self._lock:
             assert self._conn is not None
-            cursor = await self._conn.execute("SELECT COUNT(*) FROM cycles")
+            cursor = await self._conn.execute(
+                "SELECT COUNT(*) FROM cycles WHERE entry_id = ?",
+                (self._entry.entry_id,),
+            )
             row = await cursor.fetchone()
         return int(row[0]) if row else 0
 

@@ -17,6 +17,7 @@ from .const import (
     CONF_RETRAIN_INTERVAL,
     DEFAULT_RETRAIN_INTERVAL,
     DOMAIN,
+    PANEL_REGISTERED_KEY,
     PANEL_STATIC_KEY,
 )
 
@@ -26,13 +27,14 @@ _STATIC_BASE = "/local/washer_ml"
 
 
 def _build_config(hass: HomeAssistant, entry: ConfigEntry) -> dict[str, Any]:
-    slug = entry.data.get(CONF_ENTITY_SLUG) or "pracka"
-    name = entry.data.get(CONF_NAME, "Pračka")
+    base = {**entry.data, **entry.options}
+    slug = base.get(CONF_ENTITY_SLUG) or "pracka"
+    name = str(base.get(CONF_NAME) or "Pračka")
     return {
         "name": name,
         "entry_id": entry.entry_id,
         "retrain_interval": int(
-            entry.options.get(CONF_RETRAIN_INTERVAL, DEFAULT_RETRAIN_INTERVAL)
+            base.get(CONF_RETRAIN_INTERVAL, DEFAULT_RETRAIN_INTERVAL)
         ),
         "state_entity": f"sensor.{slug}_stav",
         "confidence_entity": f"sensor.{slug}_confidence",
@@ -42,6 +44,7 @@ def _build_config(hass: HomeAssistant, entry: ConfigEntry) -> dict[str, Any]:
             "heating": f"button.{slug}_kalibrace_ohrivani",
             "washing": f"button.{slug}_kalibrace_prani",
             "rinsing": f"button.{slug}_kalibrace_machani",
+            "spinning": f"button.{slug}_kalibrace_odstredovani",
             "finished": f"button.{slug}_kalibrace_skonceno",
         },
     }
@@ -57,6 +60,11 @@ async def async_setup_panel(hass: HomeAssistant, entry: ConfigEntry) -> None:
         hass.data[DOMAIN][PANEL_STATIC_KEY] = True
 
     config = _build_config(hass, entry)
+    if hass.data[DOMAIN].get(PANEL_REGISTERED_KEY):
+        try:
+            async_remove_panel(hass, _PANEL_URL)
+        except (KeyError, ValueError):
+            pass
     await async_register_panel(
         hass,
         webcomponent_name=_WEBCOMPONENT,
@@ -67,6 +75,7 @@ async def async_setup_panel(hass: HomeAssistant, entry: ConfigEntry) -> None:
         sidebar_icon="mdi:washing-machine",
         require_admin=False,
     )
+    hass.data[DOMAIN][PANEL_REGISTERED_KEY] = True
 
 
 def async_unset_panel(hass: HomeAssistant) -> None:
@@ -75,3 +84,4 @@ def async_unset_panel(hass: HomeAssistant) -> None:
         async_remove_panel(hass, _PANEL_URL)
     except (KeyError, ValueError):
         pass
+    hass.data[DOMAIN][PANEL_REGISTERED_KEY] = False
