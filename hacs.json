@@ -1,0 +1,8 @@
+{
+  "name": "Washer ML",
+  "content_in_root": false,
+  "render_readme": false,
+  "zip_release": false,
+  "homeassistant": "2024.6.0",
+  "country": ["CZ", "SK"]
+}

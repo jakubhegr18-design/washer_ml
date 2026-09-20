@@ -1,0 +1,86 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Washer ML",
+        "description": "Select the power sensor of your washing machine's smart plug. The integration detects the current washing phase fully locally.",
+        "data": {
+          "power_sensor": "Power sensor",
+          "name": "Name of the washing machine"
+        }
+      },
+      "model": {
+        "title": "Detection model",
+        "description": "The heuristic works immediately. The decision tree activates itself once enough labelled cycles are collected.",
+        "data": {
+          "model_type": "Model type",
+          "confidence_threshold": "Confidence threshold (%)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Basic settings",
+        "description": "Edit values valid since the entry was created.",
+        "data": {
+          "power_sensor": "Power sensor",
+          "name": "Name of the washing machine",
+          "model_type": "Model type",
+          "confidence_threshold": "Confidence threshold (%)"
+        }
+      },
+      "advanced": {
+        "title": "Advanced",
+        "description": "Thresholds and retraining behaviour.",
+        "data": {
+          "retrain_interval_cycles": "Auto retrain after N cycles",
+          "max_stored_cycles": "Maximum stored cycles",
+          "idle_threshold_w": "Idle threshold (W)",
+          "spin_threshold_w": "Spin threshold (W)"
+        }
+      }
+    }
+  },
+  "services": {
+    "import_history": {
+      "name": "Import history",
+      "description": "Import historical CSV data (HA history export) for pre-training.",
+      "fields": {
+        "entry_id": {
+          "name": "Config entry ID",
+          "description": "ID of the Washer ML config entry"
+        },
+        "csv_path": {
+          "name": "CSV path",
+          "description": "Path to a CSV file with history data"
+        },
+        "csv_content": {
+          "name": "CSV content",
+          "description": "Raw CSV content as a string"
+        }
+      }
+    },
+    "retrain": {
+      "name": "Retrain",
+      "description": "Force immediate model retraining.",
+      "fields": {
+        "entry_id": {
+          "name": "Config entry ID",
+          "description": "ID of the Washer ML config entry"
+        }
+      }
+    },
+    "reset_calibration": {
+      "name": "Reset calibration",
+      "description": "Delete the currently recorded cycle.",
+      "fields": {
+        "entry_id": {
+          "name": "Config entry ID",
+          "description": "ID of the Washer ML config entry"
+        }
+      }
+    }
+  }
+}

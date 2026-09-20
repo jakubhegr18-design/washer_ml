@@ -1,0 +1,86 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Washer ML",
+        "description": "Vyber senzor výkonu ze smart zásuvky vaší pračky. Integrace detekuje aktuální fázi praní 100% lokálně.",
+        "data": {
+          "power_sensor": "Senzor výkonu",
+          "name": "Název pračky"
+        }
+      },
+      "model": {
+        "title": "Detekční model",
+        "description": "Heuristika funguje okamžitě. Rozhodovací strom se sám aktivuje, jakmile nasbíráte dostatek označených cyklů.",
+        "data": {
+          "model_type": "Typ modelu",
+          "confidence_threshold": "Práh jistoty (%)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Základní nastavení",
+        "description": "Úprava všech hodnot nastavených při vytvoření integrace.",
+        "data": {
+          "power_sensor": "Senzor výkonu",
+          "name": "Název pračky",
+          "model_type": "Typ modelu",
+          "confidence_threshold": "Práh jistoty (%)"
+        }
+      },
+      "advanced": {
+        "title": "Pokročilé",
+        "description": "Prahové hodnoty a chování přeučování.",
+        "data": {
+          "retrain_interval_cycles": "Automatický retrain po N cyklech",
+          "max_stored_cycles": "Maximální počet uložených cyklů",
+          "idle_threshold_w": "Práh klidového stavu (W)",
+          "spin_threshold_w": "Práh odstřeďování (W)"
+        }
+      }
+    }
+  },
+  "services": {
+    "import_history": {
+      "name": "Import historie",
+      "description": "Naimportuje historická data z CSV (export historie HA) pro předtrénování.",
+      "fields": {
+        "entry_id": {
+          "name": "ID config entry",
+          "description": "ID konfigurační položky Washer ML"
+        },
+        "csv_path": {
+          "name": "Cesta k CSV",
+          "description": "Cesta k CSV souboru s daty historie"
+        },
+        "csv_content": {
+          "name": "Obsah CSV",
+          "description": "Surový obsah CSV jako řetězec"
+        }
+      }
+    },
+    "retrain": {
+      "name": "Retrénovat",
+      "description": "Vynutí okamžité přeučení modelu.",
+      "fields": {
+        "entry_id": {
+          "name": "ID config entry",
+          "description": "ID konfigurační položky Washer ML"
+        }
+      }
+    },
+    "reset_calibration": {
+      "name": "Reset kalibrace",
+      "description": "Smaže aktuálně nahrávaný cyklus.",
+      "fields": {
+        "entry_id": {
+          "name": "ID config entry",
+          "description": "ID konfigurační položky Washer ML"
+        }
+      }
+    }
+  }
+}
