@@ -1,5 +1,8 @@
 # Washer ML
 
+> **⚠️ Work in progress** — the integration is currently in beta and not yet
+> suitable for production use. Expect breaking changes and bugs.
+
 Home Assistant custom integration (HACS compatible) that detects washing
 machine cycle phases from a smart plug power sensor — **fully locally**, no
 cloud APIs, no internet needed for detection.
