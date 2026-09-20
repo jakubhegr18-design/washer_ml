@@ -1,0 +1,51 @@
+import_history:
+  name: Import historie
+  description: >-
+    Naimportuje historická data o spotřebě z CSV (formát HA history export:
+    entity_id,state,last_changed) a segmentuje je na cykly pro trénování.
+  fields:
+    entry_id:
+      name: Config entry
+      description: ID konkrétní instance integrace (nepovinné, pokud máte jen jednu).
+      required: false
+      selector:
+        config_entry:
+          integration: washer_ml
+    csv_path:
+      name: Cesta k CSV souboru
+      description: Cesta k souboru na disku (např. /config/history.csv). Vylučuje se s csv_content.
+      required: false
+      example: /config/washer_ml/history.csv
+      selector:
+        text:
+    csv_content:
+      name: Obsah CSV
+      description: Přímý obsah CSV jako text. Vylučuje se s csv_path.
+      required: false
+      selector:
+        text:
+          multiline: true
+
+retrain:
+  name: Retrénovat model
+  description: Vynutí okamžité přetrénování rozhodovacího stromu ze všech uložených cyklů.
+  fields:
+    entry_id:
+      name: Config entry
+      description: ID konkrétní instance integrace (nepovinné, pokud máte jen jednu).
+      required: false
+      selector:
+        config_entry:
+          integration: washer_ml
+
+reset_calibration:
+  name: Zrušit kalibraci
+  description: Zahodí aktuálně nahrávaný (nedokončený) cyklus, pokud došlo k chybě při označování fází.
+  fields:
+    entry_id:
+      name: Config entry
+      description: ID konkrétní instance integrace (nepovinné, pokud máte jen jednu).
+      required: false
+      selector:
+        config_entry:
+          integration: washer_ml
