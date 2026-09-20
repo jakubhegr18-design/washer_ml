@@ -24,8 +24,9 @@ frameworks (pure-Python decision tree + threshold heuristics).
 
 ## Installation (HACS)
 
-1. HACS → ⋯ → Custom repositories → add `https://github.com/<yourusername>/washer_ml`
-   with category **Integration**.
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=jakubhegr18-design&repository=washer_ml&category=integration)
+
+1. Click the button above (or add the repository manually: HACS → ⋯ → Custom repositories → `https://github.com/jakubhegr18-design/washer_ml` with category **Integration**).
 2. Download → restart Home Assistant.
 3. Settings → Devices & Services → Add Integration → **Washer ML** → select the
    power sensor of your smart plug (e.g. `sensor.professor_89712_5_vykon`).
